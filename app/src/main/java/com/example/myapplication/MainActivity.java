@@ -10,16 +10,18 @@ import android.util.Log;
 import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.zip.Inflater;
 
 public class MainActivity extends AppCompatActivity {
     boolean isTablet = false;
-    ArrayList<Data> arr = new ArrayList<Data>();
+    ArrayList<Data> arr = new ArrayList<>();
 
 
     @Override
@@ -29,14 +31,18 @@ public class MainActivity extends AppCompatActivity {
 
         Base adapter = new Base(this,arr);
 
-        Log.d("Respond:", "<Main>"+arr+adapter);
+        Log.d("Respond:", "<Main>"+arr.size()+adapter);
 
         Bundle bdl = new Bundle();
         DetailsFragment fragment = new DetailsFragment();
+
+        ListView lv = findViewById(R.id.ListView);
+        jsonRead jr = new jsonRead(this.getApplicationContext(),lv);
+        jr.execute();
+
         fragment.setArguments(bdl);
         Boolean str = checkIsTablet();
         Log.d("Respond:", "<Tablet>"+ isTablet + " "+str);
-
 
         if (isTablet == false){
 
@@ -51,8 +57,7 @@ public class MainActivity extends AppCompatActivity {
             transaction.commit();
 
         }
-
-
+        arr=jr.getData();
 
     }
     private boolean checkIsTablet() {

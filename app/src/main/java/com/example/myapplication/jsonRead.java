@@ -19,7 +19,7 @@ import java.net.URL;
 import java.util.ArrayList;
 
 class jsonRead extends AsyncTask<String, Integer, String> {
-    private static final String TAG_VERSION = "version";
+    private static final String TAG_VERSION = "title";
     String line;
     ListView lv;
     Context context;
@@ -41,13 +41,13 @@ class jsonRead extends AsyncTask<String, Integer, String> {
             HttpURLConnection http = (HttpURLConnection) BaseURL.openConnection();
             http.connect();
             if (http.getResponseCode() != HttpURLConnection.HTTP_OK) {
-                Log.e(TAG, "run: http request error");
+            //    Log.e(TAG, "run: http request error");
                 return null;
             }
-            Log.e(TAG, "run: RUN"+" "+BaseURL);
+         //   Log.e(TAG, "run: RUN"+" "+BaseURL);
 
             xpp.setInput(new InputStreamReader(BaseURL.openStream()));
-            Log.e(TAG, "RUN "+xpp.nextTag());
+         //   Log.e(TAG, "RUN "+xpp.nextTag());
             int eventType = xpp.getEventType();
             String currentTag = null;
             while (eventType != XmlPullParser.END_DOCUMENT){
@@ -55,17 +55,20 @@ class jsonRead extends AsyncTask<String, Integer, String> {
 
                 }else if(eventType == XmlPullParser.START_TAG) {
                     currentTag = xpp.getName();
-                    Log.d(TAG, "run: version string " + xpp.getName());
+                  //  Log.d(TAG, "run: version string " + xpp.getName());
 
                 }else if(eventType == XmlPullParser.END_TAG){
-                    Log.d(TAG, "run: version string " + xpp.getName());
+                  //  Log.d(TAG, "run: version string " + xpp.getName());
 
                 } else if(eventType == XmlPullParser.TEXT){
-                    Log.d(TAG, "run: version string " + xpp.getText().trim());
+                   // Log.d(TAG, "run: version string " + xpp.getText().trim()+" "+currentTag);
                     if (currentTag != null && TAG_VERSION.equals(currentTag)) {
                         currentTag = null;
-                        Log.d(TAG, "run: version string " + xpp.getText().trim());
-                        data.add(new Data(xpp.getText().trim()));
+                      //  Log.d(TAG, "run: Title string " + xpp.getText().trim());
+                        data.add(new Data(xpp.getText()));
+                        for(int i=0;i < data.size();i++){
+                     //   Log.d(TAG,"Data " + xpp.getColumnNumber()+" "+ data.get(i).getName().trim());
+                        }
                     }
                 }
                 eventType = xpp.next();
@@ -79,11 +82,13 @@ class jsonRead extends AsyncTask<String, Integer, String> {
             e.printStackTrace();
         }
         publishProgress();
+        Log.d("Respond","Data Read "+data.size() );
+        this.data=data;
         return null;
     }
         @Override
     public void onProgressUpdate(Integer...values){
-        Log.d("Respond","onProgressUpdate jSon  > "+data.toString());
+        Log.d("Respond","onProgressUpdate jSon  > "+ data.toString());
         Base base = new Base(context,data);
         lv.setAdapter(base);
         base.notifyDataSetChanged();

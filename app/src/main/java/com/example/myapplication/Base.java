@@ -13,6 +13,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 public class Base extends BaseAdapter {
+
     private Context context;
     private ListView lv;
     private TextView tv;
@@ -20,8 +21,9 @@ public class Base extends BaseAdapter {
 
 
     public Base(Context context, ArrayList<Data> data) {
-        this.context = this.context;
-        this.arr = arr;
+        this.context = context;
+        this.arr = data;
+        Log.d("Respond","Here");
     }
 
     @Override
@@ -39,14 +41,13 @@ public class Base extends BaseAdapter {
         return i;
     }
 
-    @SuppressLint("ResourceType")
     @Override
     public View getView(int i, View convertView, ViewGroup parent) {
 
         convertView = LayoutInflater.from(context).inflate(R.layout.row, parent, false);
 
         tv = convertView.findViewById(R.id.rowTextView11);
-        Log.d("Respond:",">>>>>>>>>>>>>>>>>>>>>>>> "+arr.get(i).getName());
+        Log.d("Respond:","Base "+arr.get(i).getName());
         tv.setText(arr.get(i).getName());
 
         notifyDataSetChanged();

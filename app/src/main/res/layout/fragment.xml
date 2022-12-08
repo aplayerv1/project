@@ -14,7 +14,7 @@
             android:id="@+id/edittext"
             android:layout_width="192dp"
             android:layout_height="65dp"
-            android:text="TextView"
+            android:text="Search"
             app:layout_column="0"
             app:layout_row="1" />
 
@@ -22,7 +22,7 @@
             android:id="@+id/switch2"
             android:layout_width="193dp"
             android:layout_height="56dp"
-            android:text="Switch"
+            android:text="Favorite"
             android:visibility="visible"
             app:layout_column="0"
             app:layout_row="2" />

@@ -15,7 +15,7 @@ import java.util.ArrayList;
 
 public class DetailsFragment extends Fragment {
 
-    ArrayList<Data> arr = new ArrayList<Data>();
+    ArrayList<Data> arr;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -49,13 +49,20 @@ public class DetailsFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        super.onCreateView(inflater, container, savedInstanceState);
         View view = inflater.inflate(R.layout.fragment,container,false);
         View view1 = inflater.inflate(R.layout.layout,container,false);
+
         ListView lv = view1.findViewById(R.id.ListView);
+
         jsonRead jr = new jsonRead(getContext(),lv);
-        Base base = new Base(getContext().getApplicationContext(),arr);
-        Log.d("Respond",">>>>>>>>>>>>>>>>>>>>>>>>>>"+base.getCount());
         jr.execute();
+        arr=jr.getData();
+        Base base = new Base(getContext(),arr);
+        lv.setAdapter(base);
+        base.notifyDataSetChanged();
+        Log.d("Respond","Detail Fragment "+ jr.data);
+
         return view;
 
     }
