@@ -2,10 +2,12 @@ package com.example.myapplication;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.text.Html;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -45,10 +47,10 @@ public class Base extends BaseAdapter {
     public View getView(int i, View convertView, ViewGroup parent) {
 
         convertView = LayoutInflater.from(context).inflate(R.layout.row, parent, false);
-
         tv = convertView.findViewById(R.id.rowTextView11);
-        Log.d("Respond:","Base "+arr.get(i).getName());
-        tv.setText(arr.get(i).getName());
+
+
+        tv.setText(Html.fromHtml(""+arr.get(i).getName()+"<div>"+arr.get(i).getUrl()+"</div>"));
 
         notifyDataSetChanged();
         return convertView;

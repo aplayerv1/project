@@ -1,10 +1,11 @@
 package com.example.myapplication;
 
-import static android.content.ContentValues.TAG;
-
 import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ListView;
 
 import org.xmlpull.v1.XmlPullParser;
@@ -17,10 +18,12 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.List;
 
 class jsonRead extends AsyncTask<String, Integer, String> {
-    private static final String TAG_VERSION = "title";
-    String line;
+    private static final String TAG_TITLE = "title";
+    private static final String TAG_URL = "link";
+    private static final String TAG_DESCRIPTION = "description";
     ListView lv;
     Context context;
     ArrayList<Data> data = new ArrayList<>();
@@ -50,30 +53,53 @@ class jsonRead extends AsyncTask<String, Integer, String> {
          //   Log.e(TAG, "RUN "+xpp.nextTag());
             int eventType = xpp.getEventType();
             String currentTag = null;
+            Data data1 = null;
+            String s = null;
+            Boolean isItem = false;
             while (eventType != XmlPullParser.END_DOCUMENT){
-                if (eventType == XmlPullParser.START_DOCUMENT){
+                currentTag = xpp.getName();
 
-                }else if(eventType == XmlPullParser.START_TAG) {
-                    currentTag = xpp.getName();
+                 if(eventType == XmlPullParser.START_TAG) {
                   //  Log.d(TAG, "run: version string " + xpp.getName());
-
+                    if(xpp.getName().equals("item")) {
+                        data1 = new Data();
+                        isItem = true;
+                    }
                 }else if(eventType == XmlPullParser.END_TAG){
-                  //  Log.d(TAG, "run: version string " + xpp.getName());
+                  //  Log.d(TAG, "run: version string " + xpp.getName())
+                     if(isItem){
 
-                } else if(eventType == XmlPullParser.TEXT){
-                   // Log.d(TAG, "run: version string " + xpp.getText().trim()+" "+currentTag);
-                    if (currentTag != null && TAG_VERSION.equals(currentTag)) {
-                        currentTag = null;
-                      //  Log.d(TAG, "run: Title string " + xpp.getText().trim());
-                        data.add(new Data(xpp.getText()));
-                        for(int i=0;i < data.size();i++){
-                     //   Log.d(TAG,"Data " + xpp.getColumnNumber()+" "+ data.get(i).getName().trim());
-                        }
+                    if (TAG_TITLE.equals(currentTag)) {
+                        data1.setName(s);
+                    }
+                    else if ( TAG_URL.equals(currentTag)) {
+
+                        data1.setUrl(s);
+
+                    }
+                   else if ( TAG_DESCRIPTION.equals(currentTag)) {
+
+
+                        data1.setDescription(s);
+
+                    }
+                   else if(currentTag.equals("item")){
+                        data.add(data1);
+                        isItem=false;
                     }
                 }
+
+                 }else if(eventType == XmlPullParser.TEXT){
+                   // Log.d(TAG, "run: version string " + xpp.getText().trim()+" "+currentTag);
+                    s = xpp.getText();
+
+                }
+
                 eventType = xpp.next();
 
             }
+            Log.d("Respond"," "+data.size());
+
         } catch (MalformedURLException e) {
             e.printStackTrace();
         } catch (IOException e) {
@@ -82,13 +108,12 @@ class jsonRead extends AsyncTask<String, Integer, String> {
             e.printStackTrace();
         }
         publishProgress();
-        Log.d("Respond","Data Read "+data.size() );
+      //  Log.d("Respond","Data Read "+data.size() );
         this.data=data;
         return null;
     }
         @Override
     public void onProgressUpdate(Integer...values){
-        Log.d("Respond","onProgressUpdate jSon  > "+ data.toString());
         Base base = new Base(context,data);
         lv.setAdapter(base);
         base.notifyDataSetChanged();

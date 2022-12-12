@@ -29,20 +29,25 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.layout);
 
-        Base adapter = new Base(this,arr);
-
-        Log.d("Respond:", "<Main>"+arr.size()+adapter);
 
         Bundle bdl = new Bundle();
         DetailsFragment fragment = new DetailsFragment();
 
         ListView lv = findViewById(R.id.ListView);
+
+
         jsonRead jr = new jsonRead(this.getApplicationContext(),lv);
         jr.execute();
+
 
         fragment.setArguments(bdl);
         Boolean str = checkIsTablet();
         Log.d("Respond:", "<Tablet>"+ isTablet + " "+str);
+
+
+
+
+
 
         if (isTablet == false){
 
