@@ -40,6 +40,9 @@ public class Data {
     public void setDescription(String description) {
         this.description = description;
     }
+    /**
+     * @param i
+     */
     public void setFav(Boolean i){
         this.fav=i;
     }

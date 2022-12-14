@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">BBC READER V0.9</string>
-    <string name="row">Would you really like to add this row %1$d.</string>
+    <string name="row">Would you really like to add this to favorites.</string>
     <string name="no">no</string>
     <string name="yes">yes</string>
     <string name="mesg">Add to Favorites?</string>

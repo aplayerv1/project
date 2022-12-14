@@ -135,7 +135,7 @@ public class DetailsFragment extends Fragment {
         }
 
 
-            arr = sql.getTasks();
+        arr = sql.getTasks();
 
         Base base = new Base(context,arr, lv);
 

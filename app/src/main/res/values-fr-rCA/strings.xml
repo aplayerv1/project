@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">BBC LECTEUR V0.9</string>
+    <string name="row">Voulez-vous vraiment ajouter ceci aux favoris.</string>
+    <string name="no">non</string>
+    <string name="yes">oui</string>
+    <string name="mesg">Ajouter aux favoris ?</string>
+    <string name="snack">Passer aux Favoris</string>
+    <string name="nom" />
+</resources>
