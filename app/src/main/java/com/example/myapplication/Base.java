@@ -22,6 +22,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.zip.Inflater;
 
+/**
+ *
+ */
 public class Base extends BaseAdapter implements Filterable {
     public Boolean boo;
     private Context context;
@@ -78,6 +81,10 @@ public class Base extends BaseAdapter implements Filterable {
     public void setBoo(Boolean o){
         this.boo=o;
     }
+
+    /**
+     * @return
+     */
     @Override
     public Filter getFilter() {
         return new Filter() {
@@ -109,6 +116,10 @@ public class Base extends BaseAdapter implements Filterable {
                 return filterResults;
             }
 
+            /**
+             * @param constraint
+             * @param results
+             */
             @Override
             protected void publishResults(CharSequence constraint, FilterResults results) {
                  Log.d("TAG", "Count: " + results.count);

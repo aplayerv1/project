@@ -20,6 +20,9 @@ import java.util.List;
 public class MainActivity2 extends AppCompatActivity {
     ArrayList<Data> arr = new ArrayList<Data>();
 
+    /**
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

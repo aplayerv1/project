@@ -1,18 +1,27 @@
 package com.example.myapplication;
 
+import static android.content.Context.MODE_PRIVATE;
+
 import android.annotation.SuppressLint;
+import android.app.ActionBar;
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Adapter;
@@ -36,31 +45,23 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
+/**
+ *
+ */
 public class DetailsFragment extends Fragment {
 
     ArrayList<Data> arr;
     ArrayList<Data> allData;
-    Sql sql = new Sql(getContext(),2);
+    Sql sql;
+    String name;
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "Name";
-    private static final String ARG_PARAM2 = "Height";
-    private static final String ARG_PARAM3 = "Mass";
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-    private String mParam3;
     public DetailsFragment() {
-        // Required empty public constructor
+
     }
 
     public static DetailsFragment newInstance(String param1, String param2,String param3) {
         DetailsFragment fragment = new DetailsFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        args.putString(ARG_PARAM3, param3);
         fragment.setArguments(args);
         return fragment;
 
@@ -69,39 +70,56 @@ public class DetailsFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
     }
 
+    /**
+     * @param inflater
+     * @param container
+     * @param savedInstanceState
+     * @return
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
         View view = inflater.inflate(R.layout.fragment,container,false);
         Resources res = getResources();
+        this.setHasOptionsMenu(true);
+        Name name = new Name();
+        final EditText txtUrl = new EditText(getContext());
+        SharedPreferences sharedPreferences = getContext().getSharedPreferences("MySharedPref",MODE_PRIVATE);
+        name.setName(sharedPreferences.getString("name",""));
+        if(name.getName()==null){
+        new AlertDialog.Builder(getContext())
+                    .setTitle("Welcome What is Your Name?")
+                    .setView(txtUrl)
+                    .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int whichButton) {
+                            name.setName(txtUrl.getText().toString());
+
+                        }
+                    })
+                    .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int whichButton) {
+                        }
+                    })
+                    .show();}
+
+
+
         ListView lv = container.findViewById(R.id.ListView1);
         SearchView et = view.findViewById(R.id.edittext);
         Switch sw = view.findViewById(R.id.switch2);
         Button btn = view.findViewById(R.id.button);
         Button btn2 = view.findViewById(R.id.button2);
+
+
+
         Context context = getContext();
         jsonRead jr = new jsonRead(context,lv);
 //        public AlertDialog.Builder setTitle();
-        Sql sql = new Sql(context,8);
+        sql = new Sql(context,8);
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(context);
-        builder.setTitle("BBC READER");
-        builder.setMessage("1. Hold Clink On News Makes it Favorite, will display green\n" +
-                        "2. Clicking the news pops Browser\n " +
-                        "3. Search The News\n" +
-                        "4. When Switch is on search only through favorites\n" +
-                        "5. Button Show Favorites shows favorites\n" +
-                        "6. Button refresh refresh\n")
-                .setCancelable(false)
-                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                    }
-                });
-        builder.show();
 
 
         if(sql.getTasks().isEmpty()){
@@ -197,7 +215,39 @@ public class DetailsFragment extends Fragment {
                 container.requestLayout();
             }
         });
+
         return view;
+
+    }
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater)
+    {
+        inflater.inflate(R.menu.menu, menu);
+        return;
+    }
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        Context context = getContext();
+
+        switch (id) {
+            case R.id.about:
+                AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                builder.setTitle("BBC READER");
+                builder.setMessage("1. Hold Clink On News Makes it Favorite, will display green\n" +
+                                "2. Clicking the news pops Browser\n " +
+                                "3. Search The News\n" +
+                                "4. When Switch is on search only through favorites\n" +
+                                "5. Button Show Favorites shows favorites\n" +
+                                "6. Button refresh refresh\n")
+                        .setCancelable(false)
+                        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                            }
+                        });
+                builder.show();
+                return true;
+        }
+        return super.onOptionsItemSelected(item); // important line
 
     }
 

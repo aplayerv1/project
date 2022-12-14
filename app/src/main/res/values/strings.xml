@@ -5,4 +5,5 @@
     <string name="yes">yes</string>
     <string name="mesg">Add to Favorites?</string>
     <string name="snack">Switching to Favorites</string>
+    <string name="name" />
 </resources>

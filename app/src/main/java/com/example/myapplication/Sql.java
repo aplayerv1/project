@@ -9,6 +9,9 @@ import android.util.Log;
 
 import java.util.ArrayList;
 
+/**
+ *
+ */
 public class Sql extends SQLiteOpenHelper {
     private static final String DB_NAME = "lab05";
     private static final String DB_TABLE = "tasks";
@@ -26,6 +29,9 @@ public class Sql extends SQLiteOpenHelper {
     }
 
 
+    /**
+     * @param sqLiteDatabase
+     */
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
         String query = "CREATE TABLE " + DB_TABLE + " ("
@@ -46,6 +52,13 @@ public class Sql extends SQLiteOpenHelper {
     public SQLiteDatabase getDB(){
         return this.getWritableDatabase();
     }
+
+    /**
+     * @param task
+     * @param url
+     * @param desc
+     * @param i
+     */
     public void addTasks(String task, String url, String desc, int i) {
 
         SQLiteDatabase db = this.getWritableDatabase();
@@ -61,6 +74,10 @@ public class Sql extends SQLiteOpenHelper {
 
         db.close();
     }
+
+    /**
+     * @return
+     */
     public ArrayList<Data> getTasks(){
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cr = db.rawQuery("SELECT * FROM "+ DB_TABLE, null);
@@ -74,6 +91,10 @@ public class Sql extends SQLiteOpenHelper {
         cr.close();
         return arr;
     }
+
+    /**
+     * @param i
+     */
     public void removeTask(int i){
         SQLiteDatabase db = this.getWritableDatabase();
         db.execSQL("DELETE FROM "+ DB_TABLE + " WHERE " + ID_COL + " = " + i);
@@ -82,11 +103,20 @@ public class Sql extends SQLiteOpenHelper {
         Log.d("TAG","DELETING DB");
         db.close();
     }
+
+    /**
+     * @param id
+     * @param checked
+     */
     public void addFav(int id, boolean checked){
         SQLiteDatabase db = this.getWritableDatabase();
         int s = (checked?1:0);
         db.execSQL("UPDATE "+DB_TABLE+" SET "+TASK_FAV+ " = "+id+1 + " WHERE "+ ID_COL+"=" + s);
     }
+
+    /**
+     * @return
+     */
     public ArrayList<Data> getFav(){
         SQLiteDatabase db = this.getReadableDatabase();
         ArrayList<Data> arr = new ArrayList<>();

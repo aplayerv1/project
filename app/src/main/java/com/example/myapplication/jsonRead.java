@@ -21,6 +21,9 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ *
+ */
 class jsonRead extends AsyncTask<String, Integer, String> {
     private static final String TAG_TITLE = "title";
     private static final String TAG_URL = "link";
@@ -37,6 +40,10 @@ class jsonRead extends AsyncTask<String, Integer, String> {
     }
 
 
+    /**
+     * @param strings
+     * @return
+     */
     @Override
     protected String doInBackground(String... strings) {
 
@@ -116,6 +123,10 @@ class jsonRead extends AsyncTask<String, Integer, String> {
         this.data=data;
         return null;
     }
+
+    /**
+     * @param values
+     */
         @Override
     public void onProgressUpdate(Integer...values){
           Sql sql = new Sql(context, 8);
