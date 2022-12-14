@@ -3,7 +3,13 @@ package com.example.myapplication;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.Resources;
+import android.database.sqlite.SQLiteDatabase;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -13,10 +19,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.SearchView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.zip.Inflater;
 
 public class MainActivity extends AppCompatActivity {
@@ -33,20 +41,9 @@ public class MainActivity extends AppCompatActivity {
         Bundle bdl = new Bundle();
         DetailsFragment fragment = new DetailsFragment();
 
-        ListView lv = findViewById(R.id.ListView);
-
-
-        jsonRead jr = new jsonRead(this.getApplicationContext(),lv);
-        jr.execute();
-
-
         fragment.setArguments(bdl);
         Boolean str = checkIsTablet();
         Log.d("Respond:", "<Tablet>"+ isTablet + " "+str);
-
-
-
-
 
 
         if (isTablet == false){
@@ -62,7 +59,7 @@ public class MainActivity extends AppCompatActivity {
             transaction.commit();
 
         }
-        arr=jr.getData();
+
 
     }
     private boolean checkIsTablet() {

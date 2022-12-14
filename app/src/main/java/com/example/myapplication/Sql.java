@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 import java.util.ArrayList;
 
@@ -14,7 +15,9 @@ public class Sql extends SQLiteOpenHelper {
     private static final int DB_VERSION = 1;
     private static final String ID_COL = "id";
     private static final String TASK_COL = "name";
-    private static final String TASK_URGCOL = "urg";
+    private static final String TASK_URL = "URL";
+    private static final String TASK_DES = "desc";
+    private static final String TASK_FAV = "fav";
     private static boolean TASK_URG = false;
     private static int i = 0;
 
@@ -27,7 +30,11 @@ public class Sql extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
         String query = "CREATE TABLE " + DB_TABLE + " ("
                 + ID_COL + " INTEGER PRIMARY KEY AUTOINCREMENT, "
-                + TASK_COL + " TEXT," + TASK_URGCOL + " INTEGER)";
+                + TASK_COL + " TEXT," + TASK_URL + " TEXT," +TASK_DES +" TEXT,"+ TASK_FAV +" INTEGER )";
+
+
+
+        Log.d("TAG","SQL : "+query);
         sqLiteDatabase.execSQL(query);
     }
 
@@ -39,15 +46,17 @@ public class Sql extends SQLiteOpenHelper {
     public SQLiteDatabase getDB(){
         return this.getWritableDatabase();
     }
-    public void addTasks(String task, Boolean URG) {
+    public void addTasks(String task, String url, String desc, int i) {
 
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
 
         values.put(TASK_COL, task);
-        values.put(TASK_URGCOL, URG?1:0);
-
+        values.put(TASK_URL, url);
+        values.put(TASK_DES, desc);
+        values.put(TASK_FAV, i);
+        Log.d("TAG","add Task"+values);
         db.insert(DB_TABLE, null, values);
 
         db.close();
@@ -57,19 +66,18 @@ public class Sql extends SQLiteOpenHelper {
         Cursor cr = db.rawQuery("SELECT * FROM "+ DB_TABLE, null);
         ArrayList<Data> arr = new ArrayList<>();
 
-//        if (cr.moveToFirst()){
-//            do {
-//                arr.add(new Data(cr.getString(1),
-//                        cr.getInt(2)==1,cr.getInt(0)));
-//            } while (cr.moveToNext());
-//        }
-
+        if (cr.moveToFirst()){
+            do {
+                arr.add(new Data(cr.getString(1),cr.getString(2), cr.getString(3),cr.getInt(4)));
+            } while (cr.moveToNext());
+        }
         cr.close();
         return arr;
     }
     public void removeTask(int i){
         SQLiteDatabase db = this.getWritableDatabase();
         db.execSQL("DELETE FROM "+ DB_TABLE + " WHERE " + ID_COL + " = " + i);
+        Log.d("TAG","DELETING DB");
         db.close();
     }
 

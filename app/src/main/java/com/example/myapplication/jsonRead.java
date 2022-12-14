@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.BaseAdapter;
 import android.widget.ListView;
 
 import org.xmlpull.v1.XmlPullParser;
@@ -28,6 +29,8 @@ class jsonRead extends AsyncTask<String, Integer, String> {
     Context context;
     ArrayList<Data> data = new ArrayList<>();
 
+
+
     jsonRead(Context context,ListView lv){
         this.context = context;
         this.lv = lv;
@@ -36,6 +39,7 @@ class jsonRead extends AsyncTask<String, Integer, String> {
 
     @Override
     protected String doInBackground(String... strings) {
+
         URL BaseURL = null;
         try {
 
@@ -98,7 +102,7 @@ class jsonRead extends AsyncTask<String, Integer, String> {
                 eventType = xpp.next();
 
             }
-            Log.d("Respond"," "+data.size());
+            Log.d("Respond","Data SIZE "+data.size());
 
         } catch (MalformedURLException e) {
             e.printStackTrace();
@@ -114,9 +118,25 @@ class jsonRead extends AsyncTask<String, Integer, String> {
     }
         @Override
     public void onProgressUpdate(Integer...values){
-        Base base = new Base(context,data);
-        lv.setAdapter(base);
-        base.notifyDataSetChanged();
+          Sql sql = new Sql(context, 8);
+//        Base base = new Base(context, data, lv);
+//        lv.setAdapter(base);
+//        base.notifyDataSetChanged();
+//        lv.invalidateViews();
+            if(sql.getTasks().isEmpty()){
+                for(int i=0;i<data.size();i++){
+                    sql.addTasks(data.get(i).getName(),data.get(i).getUrl(),data.get(i).getDescription(),0);
+                }
+            }else{
+                if(sql.getTasks().size()<data.size()){
+                    Log.d("tag","NOT EQUAL"+sql.getTasks().size()+" "+data.size());
+                    for(int o=0;o<sql.getTasks().size();o++){
+                        sql.removeTask(o);
+                    }
+                }else{
+                Log.d("tag","NOT EMPTY "+sql.getTasks().size());}
+            }
+
     }
     public ArrayList getData(){
         return this.data;
