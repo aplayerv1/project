@@ -1,15 +1,13 @@
 package com.example.myapplication;
 
-import java.util.ArrayList;
-
 public class Data {
 
     private String name;
     private String url;
     private String description;
-    private int fav = 0;
+    private boolean fav;
 
-    public Data(String name, String url, String description, int i){
+    public Data(String name, String url, String description, boolean i){
         this.name = name;
         this.url = url;
         this.description=description;
@@ -31,7 +29,12 @@ public class Data {
     public void setDescription(String description) {
         this.description = description;
     }
-
+    public void setFav(Boolean i){
+        this.fav=i;
+    }
+    public boolean getFav(){
+        return fav;
+    }
     public String getName(){
         return name;
     }

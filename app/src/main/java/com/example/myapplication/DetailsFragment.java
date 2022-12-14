@@ -76,12 +76,12 @@ public class DetailsFragment extends Fragment {
         Resources res = getResources();
         ListView lv = container.findViewById(R.id.ListView1);
         SearchView et = view.findViewById(R.id.edittext);
+        Switch sw = view.findViewById(R.id.switch2);
 
         Context context = getContext();
         jsonRead jr = new jsonRead(context,lv);
 
         Sql sql = new Sql(context,8);
-        arr = sql.getTasks();
 
         if(sql.getTasks().isEmpty()){
             jr.execute();
@@ -95,7 +95,12 @@ public class DetailsFragment extends Fragment {
                 Log.d("SQL","NOT EMPTY "+jr.getData().size());}
         }
 
+
+            arr = sql.getTasks();
+
         Base base = new Base(context,arr, lv);
+
+
         lv.setAdapter(base);
         base.notifyDataSetChanged();
         lv.invalidateViews();
@@ -107,7 +112,7 @@ public class DetailsFragment extends Fragment {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
                             i+=1;
-
+                            sql.addFav(i,true);
                         }
                     }).setNegativeButton(R.string.no,null).show();
             return false;
@@ -129,11 +134,14 @@ public class DetailsFragment extends Fragment {
 
             @Override
             public boolean onQueryTextChange(String s) {
-
-                    base.getFilter().filter(s);
-                    base.notifyDataSetChanged();
-                    lv.invalidateViews();
-
+                if(sw.isChecked()){
+                    base.setBoo(true);
+                }else {
+                    base.setBoo(false);
+                }
+                base.getFilter().filter(s);
+                base.notifyDataSetChanged();
+                lv.invalidateViews();
                 return true;
             }
         });

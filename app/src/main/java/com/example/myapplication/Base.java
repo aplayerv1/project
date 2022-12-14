@@ -1,8 +1,11 @@
 package com.example.myapplication;
 
+import static com.example.myapplication.R.*;
 import static java.lang.Thread.sleep;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
+import android.graphics.Color;
 import android.text.Html;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -12,12 +15,15 @@ import android.widget.BaseAdapter;
 import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.ListView;
+import android.widget.Switch;
 import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.zip.Inflater;
 
 public class Base extends BaseAdapter implements Filterable {
+    public Boolean boo;
     private Context context;
     private ListView lv;
     private TextView tv;
@@ -29,7 +35,7 @@ public class Base extends BaseAdapter implements Filterable {
         this.arr = data;
         this.allData = data;
         this.lv = lv;
-
+        this.boo=false;
         // Log.d("TAG", "--> All Data Set " + allData.size());
     }
 
@@ -56,14 +62,21 @@ public class Base extends BaseAdapter implements Filterable {
 
     @Override
     public View getView(int i, View convertView, ViewGroup parent) {
-        convertView = LayoutInflater.from(context).inflate(R.layout.row, parent, false);
+        convertView = LayoutInflater.from(context).inflate(layout.row, parent, false);
 
-        tv = convertView.findViewById(R.id.rowTextView11);
-        tv.setText(Html.fromHtml(""+arr.get(i).getName()+"<div>"+arr.get(i).getUrl()+"</div>"));
+        tv = convertView.findViewById(id.rowTextView11);
 
+        tv.setText(Html.fromHtml("" + arr.get(i).getName() + "<div>" + arr.get(i).getUrl() + "</div>"));
+
+        if(arr.get(i).getFav()){
+            convertView.setBackgroundColor(Color.GREEN);
+        }
         Base.this.notifyDataSetChanged();
         lv.invalidateViews();
         return convertView;
+    }
+    public void setBoo(Boolean o){
+        this.boo=o;
     }
     @Override
     public Filter getFilter() {
@@ -105,10 +118,23 @@ public class Base extends BaseAdapter implements Filterable {
 
                 } else {
                     try {
-                        sleep(350);
+                        sleep(100);
                         Sql sql = new Sql(context,8);
-                        allData=sql.getTasks();
+
                         arr = new ArrayList<Data>(sql.getTasks());
+
+
+
+                        if(boo==true){
+                           allData=sql.getFav();
+                           Log.d("TAG", "CHECKED " + arr.size());
+
+                       }else {
+                           allData = sql.getTasks();
+                           Log.d("TAG", "REGULAR " + arr.size());
+
+                       }
+                        notifyDataSetChanged();
                         Log.d("TAG", "ARR has " + arr.size());
                     } catch (InterruptedException e) {
                         e.printStackTrace();

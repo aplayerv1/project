@@ -38,6 +38,8 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.layout);
 
 
+        View convertView = LayoutInflater.from(getApplicationContext()).inflate(R.layout.activity_main,null);
+        SearchView sv = convertView.findViewById(R.id.searchview);
         Bundle bdl = new Bundle();
         DetailsFragment fragment = new DetailsFragment();
 
@@ -46,18 +48,16 @@ public class MainActivity extends AppCompatActivity {
         Log.d("Respond:", "<Tablet>"+ isTablet + " "+str);
 
 
-        if (isTablet == false){
 
-            Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+        if (isTablet == false){
+            Intent intent = new Intent(getApplicationContext(), MainActivity2.class);
             intent.putExtras(bdl);
             startActivity(intent);
 
         }else{
-
             androidx.fragment.app.FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
             transaction.replace(R.id.layout, fragment);
             transaction.commit();
-
         }
 
 
@@ -71,7 +71,7 @@ public class MainActivity extends AppCompatActivity {
         float heightInches = metrics.heightPixels / metrics.ydpi;
         double diagonalInches = Math.sqrt(Math.pow(widthInches, 2) + Math.pow(heightInches, 2));
         Log.d("Results",">>>   " +display+" "+diagonalInches);
-        if (diagonalInches >=6.0) {
+        if (diagonalInches >=10.0) {
             isTablet = true;
         }
 
