@@ -19,14 +19,18 @@ import android.widget.Adapter;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
+
+import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -77,11 +81,28 @@ public class DetailsFragment extends Fragment {
         ListView lv = container.findViewById(R.id.ListView1);
         SearchView et = view.findViewById(R.id.edittext);
         Switch sw = view.findViewById(R.id.switch2);
-
+        Button btn = view.findViewById(R.id.button);
+        Button btn2 = view.findViewById(R.id.button2);
         Context context = getContext();
         jsonRead jr = new jsonRead(context,lv);
-
+//        public AlertDialog.Builder setTitle();
         Sql sql = new Sql(context,8);
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setTitle("BBC READER");
+        builder.setMessage("1. Hold Clink On News Makes it Favorite, will display green\n" +
+                        "2. Clicking the news pops Browser\n " +
+                        "3. Search The News\n" +
+                        "4. When Switch is on search only through favorites\n" +
+                        "5. Button Show Favorites shows favorites\n" +
+                        "6. Button refresh refresh\n")
+                .setCancelable(false)
+                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                    }
+                });
+        builder.show();
+
 
         if(sql.getTasks().isEmpty()){
             jr.execute();
@@ -146,8 +167,37 @@ public class DetailsFragment extends Fragment {
             }
         });
 
-        return view;
+        btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Snackbar snackbar = Snackbar
+                        .make(getView(), res.getString(R.string.snack), Snackbar.LENGTH_LONG);
+                snackbar.show();
 
+                arr.clear();
+                arr = new ArrayList<Data>(sql.getFav());
+                Base base1 = new Base(context,arr,lv);
+                lv.setAdapter(base1);
+                container.refreshDrawableState();
+                base1.notifyDataSetChanged();
+                lv.invalidateViews();
+                container.requestLayout();
+            }
+        });
+        btn2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                arr.clear();
+                arr = new ArrayList<Data>(sql.getTasks());
+                Base base1 = new Base(context,arr,lv);
+                lv.setAdapter(base1);
+                container.refreshDrawableState();
+                base1.notifyDataSetChanged();
+                lv.invalidateViews();
+                container.requestLayout();
+            }
+        });
+        return view;
 
     }
 

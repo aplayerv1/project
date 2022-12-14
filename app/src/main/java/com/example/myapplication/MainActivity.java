@@ -1,7 +1,9 @@
 package com.example.myapplication;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
@@ -15,6 +17,7 @@ import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Display;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -38,8 +41,10 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.layout);
 
 
-        View convertView = LayoutInflater.from(getApplicationContext()).inflate(R.layout.activity_main,null);
-        SearchView sv = convertView.findViewById(R.id.searchview);
+        @SuppressLint("ResourceType") View convertView = LayoutInflater.from(getApplicationContext()).inflate(R.menu.menu,null);
+        Toolbar toolbar = convertView.findViewById(R.id.refresh);
+
+        setSupportActionBar(toolbar);
         Bundle bdl = new Bundle();
         DetailsFragment fragment = new DetailsFragment();
 
@@ -77,5 +82,9 @@ public class MainActivity extends AppCompatActivity {
 
         return isTablet;
     }
-
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu,menu);
+        return super.onCreateOptionsMenu(menu);
+    }
 }

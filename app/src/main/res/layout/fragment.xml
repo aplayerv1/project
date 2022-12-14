@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".DetailsFragment">
+    tools:context=".DetailsFragment"
+    >
 
     <androidx.gridlayout.widget.GridLayout
         android:layout_width="match_parent"
@@ -22,7 +23,7 @@
             android:id="@+id/switch2"
             android:layout_width="193dp"
             android:layout_height="56dp"
-            android:text="Favorite"
+            android:text="Search Favorite"
             android:visibility="visible"
             app:layout_column="0"
             app:layout_row="2" />
@@ -35,6 +36,22 @@
             android:visibility="invisible"
             app:layout_column="0"
             app:layout_row="0" />
+
+        <Button
+            android:id="@+id/button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Show Favorites"
+            app:layout_column="0"
+            app:layout_row="3" />
+
+        <Button
+            android:id="@+id/button2"
+            android:layout_width="157dp"
+            android:layout_height="wrap_content"
+            android:text="refresh"
+            app:layout_column="0"
+            app:layout_row="4" />
 
 
     </androidx.gridlayout.widget.GridLayout>
